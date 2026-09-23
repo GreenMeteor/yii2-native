@@ -1,0 +1,13 @@
+{
+  "protocol": "yii2-native-element-tree",
+  "version": 1,
+  "description": "Initial framework-neutral element tree protocol.",
+  "nodes": {
+    "text": {},
+    "button": {},
+    "image": {},
+    "vstack": {},
+    "hstack": {},
+    "scroll": {}
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "name": "greenmeteor/yii2-native",
+  "description": "Native mobile application runtime and UI bridge for Yii2 applications.",
+  "type": "yii2-extension",
+  "license": "BSD-3-Clause",
+  "minimum-stability": "dev",
+  "prefer-stable": true,
+  "require": {
+    "php": ">=8.2",
+    "yiisoft/yii2": "^2.0.55"
+  },
+  "autoload": {
+    "psr-4": {
+      "greenmeteor\\native\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "greenmeteor\\native\\tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "bootstrap": "greenmeteor\\native\\Bootstrap"
+  },
+  "scripts": {
+    "test": "phpunit"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^10.5 || ^11.0"
+  }
+}
