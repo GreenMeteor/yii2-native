@@ -25,7 +25,7 @@ This package currently provides the Yii2-side architecture:
 ## Requirements
 
 - PHP 8.2+
-- Yii2 2.0.49+
+- Yii2 2.0.55+
 - Xcode for iOS development
 - Android Studio / Android SDK for Android development
 
