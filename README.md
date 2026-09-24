@@ -2,7 +2,7 @@
 
 Native mobile application foundation for Yii2.
 
-Yii2 Native is an independent Yii2 implementation inspired by the architecture of NativePHP Mobile. It is designed to let ordinary Yii2 applications target iOS and Android without requiring Laravel or HumHub.
+Yii2 Native is an independent Yii2 implementation inspired by the architecture of NativePHP Mobile.
 
 ## Status
 
@@ -21,8 +21,6 @@ This package currently provides the Yii2-side architecture:
 - JavaScript bridge helper
 - iOS and Android shell scaffolding
 - unit tests
-
-The native shell and embedded PHP runtime are intentionally scaffolded rather than represented as a fake production implementation. The next implementation stage can replace the shell adapters with the actual embedded PHP runtime and platform renderer.
 
 ## Requirements
 
@@ -167,4 +165,4 @@ The long-term renderer is intended to use a compact frame protocol rather than J
 
 ## License
 
-MIT.
+BSD 3-Clause License.
