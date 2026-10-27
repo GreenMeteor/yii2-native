@@ -23,9 +23,12 @@
     "bootstrap": "greenmeteor\\native\\Bootstrap"
   },
   "scripts": {
-    "test": "phpunit"
+    "test": "codecept run",
+    "test:phpunit": "phpunit"
   },
   "require-dev": {
-    "phpunit/phpunit": "^10.5 || ^11.0"
+    "phpunit/phpunit": "^10.5 || ^11.0",
+    "codeception/codeception": "^5.1",
+    "codeception/module-asserts": "^3.0"
   }
 }

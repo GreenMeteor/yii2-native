@@ -22,8 +22,7 @@ class RendererTest extends TestCase
             ],
         ]);
 
-        $tree = $stack->run();
-        $frame = (new Renderer())->render($tree);
+        $frame = (new Renderer())->render($stack);
 
         $this->assertSame(1, $frame['version']);
         $this->assertSame('vstack', $frame['root']['type']);
