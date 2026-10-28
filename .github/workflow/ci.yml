@@ -8,19 +8,46 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
+  php-check:
+    name: PHP ${{ matrix.php }} syntax check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    strategy:
+      fail-fast: false
+      matrix:
+        php: ['8.2', '8.3', '8.4']
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+
+      - name: Check PHP syntax
+        shell: bash
+        run: |
+          find src tests -type f -name '*.php' -print0 |
+            xargs -0 -r -n1 php -l
+
   tests:
-    name: PHP ${{ matrix.php }} / Codeception
+    name: PHP ${{ matrix.php }} tests
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
     strategy:
       fail-fast: false
       matrix:
-        php:
-          - '8.2'
-          - '8.3'
-          - '8.4'
+        php: ['8.2', '8.3', '8.4']
 
     steps:
       - name: Checkout repository
@@ -39,14 +66,8 @@ jobs:
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
 
-      - name: Check PHP syntax
-        shell: bash
-        run: |
-          find src tests -type f -name '*.php' -print0 |
-            xargs -0 -r -n1 php -l
-
       - name: Build Codeception
         run: vendor/bin/codecept build
 
-      - name: Run tests
+      - name: Run Codeception tests
         run: vendor/bin/codecept run --no-interaction
