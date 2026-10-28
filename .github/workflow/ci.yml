@@ -1,4 +1,4 @@
-name: PHP Composer
+name: PHP and Yii2 CI
 
 on:
   push:
@@ -11,12 +11,12 @@ permissions:
   contents: read
 
 concurrency:
-  group: php-composer-${{ github.event.pull_request.number || github.ref }}
+  group: yii2-native-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
   build:
-    name: PHP ${{ matrix.php }} Tests
+    name: PHP ${{ matrix.php }} / Yii2
     runs-on: ubuntu-latest
     timeout-minutes: 15
 
@@ -36,20 +36,22 @@ jobs:
           tools: composer:v2
           coverage: none
 
-      - name: Validate Composer files
-        run: composer validate --no-check-publish
+      - name: Validate composer.json and composer.lock
+        run: composer validate --strict
 
       - name: Cache Composer packages
         uses: actions/cache@v4
         with:
-          path: |
-            ~/.composer/cache/files
+          path: ~/.composer/cache/files
           key: ${{ runner.os }}-php-${{ matrix.php }}-${{ hashFiles('composer.lock') }}
           restore-keys: |
             ${{ runner.os }}-php-${{ matrix.php }}-
 
       - name: Install dependencies
         run: composer install --prefer-dist --no-interaction --no-progress
+
+      - name: Verify Yii2 dependency
+        run: composer show yiisoft/yii2
 
       - name: Check PHP syntax
         shell: bash
