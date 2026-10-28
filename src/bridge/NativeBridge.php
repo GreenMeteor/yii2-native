@@ -5,7 +5,7 @@ namespace greenmeteor\native\bridge;
 use greenmeteor\native\events\NativeCallEvent;
 use yii\base\Component;
 use yii\base\InvalidArgumentException;
-use yii\base\RuntimeException;
+use greenmeteor\native\exceptions\NativeUnavailableException;
 
 class NativeBridge extends Component
 {
@@ -49,7 +49,7 @@ class NativeBridge extends Component
         }
 
         if (!$this->allowUnavailable) {
-            throw new RuntimeException(
+            throw new NativeUnavailableException(
                 'The Yii2 Native runtime is not available. '
                 . 'This bridge call requires the native mobile runtime.'
             );

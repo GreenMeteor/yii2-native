@@ -6,7 +6,7 @@ use Codeception\Test\Unit;
 use greenmeteor\native\bridge\NativeBridge;
 use greenmeteor\native\events\NativeCallEvent;
 use yii\base\InvalidArgumentException;
-use yii\base\RuntimeException;
+use greenmeteor\native\exceptions\NativeUnavailableException;
 
 class NativeBridgeTest extends Unit
 {
@@ -19,7 +19,7 @@ class NativeBridgeTest extends Unit
 
     public function testUnavailableRuntimeRejectsCallsByDefault(): void
     {
-        $this->expectException(RuntimeException::class);
+        $this->expectException(NativeUnavailableException::class);
 
         (new NativeBridge())->call('Device.vibrate', ['duration' => 100]);
     }
@@ -64,7 +64,7 @@ class NativeBridgeTest extends Unit
         try {
             $bridge->call('Device.vibrate');
             $this->fail('Expected an unavailable-runtime exception.');
-        } catch (RuntimeException $exception) {
+        } catch (NativeUnavailableException $exception) {
             $this->assertSame($exception, $captured);
         }
     }

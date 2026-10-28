@@ -43,9 +43,34 @@ class PluginManagerTest extends Unit
                 (new PluginManager())->discover($directory)
             );
         } finally {
-            unlink($directory . '/sample/native-plugin.php');
-            rmdir($directory . '/sample');
-            rmdir($directory);
+            $this->removeDirectory($directory);
         }
+    }
+
+    private function removeDirectory(string $directory): void
+    {
+        if (!is_dir($directory)) {
+            return;
+        }
+
+        $items = scandir($directory);
+        if ($items === false) {
+            return;
+        }
+
+        foreach ($items as $item) {
+            if ($item === '.' || $item === '..') {
+                continue;
+            }
+
+            $path = $directory . DIRECTORY_SEPARATOR . $item;
+            if (is_dir($path) && !is_link($path)) {
+                $this->removeDirectory($path);
+            } else {
+                @unlink($path);
+            }
+        }
+
+        @rmdir($directory);
     }
 }

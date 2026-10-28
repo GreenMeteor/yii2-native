@@ -13,10 +13,10 @@ class RendererTest extends Unit
 {
     public function testWidgetTreeRendersToProtocolFrame(): void
     {
-        $stack = VStack::widget([
+        $stack = new VStack([
             'children' => [
-                Text::widget(['text' => 'Hello']),
-                Button::widget(['text' => 'Continue', 'action' => 'continue']),
+                new Text(['text' => 'Hello']),
+                new Button(['text' => 'Continue', 'action' => 'continue']),
             ],
         ]);
 

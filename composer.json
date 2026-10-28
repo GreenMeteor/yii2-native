@@ -23,12 +23,17 @@
     "bootstrap": "greenmeteor\\native\\Bootstrap"
   },
   "scripts": {
-    "test": "codecept run",
+    "test": "codecept build && codecept run",
     "test:phpunit": "phpunit"
   },
   "require-dev": {
     "phpunit/phpunit": "^10.5 || ^11.0",
     "codeception/codeception": "^5.1",
     "codeception/module-asserts": "^3.0"
+  },
+  "config": {
+    "allow-plugins": {
+      "yiisoft/yii2-composer": true
+    }
   }
 }

@@ -163,6 +163,17 @@ The package intentionally follows the same high-level separation used by modern 
 
 The long-term renderer is intended to use a compact frame protocol rather than JSON on every UI update. Device APIs remain a separate named-function bridge because they are less latency-sensitive and naturally extensible through plugins.
 
+## Development and tests
+
+Install development dependencies and run the Codeception unit suite:
+
+```bash
+composer install
+composer test
+```
+
+The suite covers the runtime lifecycle, native bridge validation and events, plugin registration/discovery, and widget-tree rendering/JSON encoding. The GitHub Actions CI workflow runs Composer validation, PHP syntax checks, and the tests on PHP 8.2, 8.3, and 8.4. Pull requests also receive a dependency review when the repository is public.
+
 ## License
 
 BSD 3-Clause License.
