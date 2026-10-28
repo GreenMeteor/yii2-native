@@ -7,6 +7,7 @@ use greenmeteor\native\plugin\PluginManager;
 use greenmeteor\native\renderer\Renderer;
 use greenmeteor\native\runtime\Runtime;
 use yii\base\Component;
+use Yii;
 
 class Native extends Component
 {
