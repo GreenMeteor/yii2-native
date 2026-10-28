@@ -1,16 +1,22 @@
-
 name: CI
 
 on:
   push:
+    branches:
+      - '**'
   pull_request:
+    types:
+      - opened
+      - synchronize
+      - reopened
+      - ready_for_review
   workflow_dispatch:
 
 permissions:
   contents: read
 
 concurrency:
-  group: ${{ github.workflow }}-${{ github.ref }}
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
   cancel-in-progress: true
 
 jobs:
@@ -34,11 +40,6 @@ jobs:
           php-version: ${{ matrix.php }}
           tools: composer:v2
           coverage: none
-
-      - name: Display PHP and Composer versions
-        run: |
-          php --version
-          composer --version
 
       - name: Validate Composer configuration
         run: composer validate --no-check-publish
