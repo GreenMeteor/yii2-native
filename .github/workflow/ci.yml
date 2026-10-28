@@ -8,14 +8,23 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
 jobs:
   test:
     name: PHP ${{ matrix.php }} tests
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     strategy:
       fail-fast: false
       matrix:
         php: ['8.2', '8.3', '8.4']
+
+    env:
+      COMPOSER_ROOT_VERSION: '1.0.0'
+
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -24,8 +33,10 @@ jobs:
         uses: shivammathur/setup-php@v2
         with:
           php-version: ${{ matrix.php }}
+          extensions: mbstring, intl
           tools: composer:v2
           coverage: none
+          cache: composer
 
       - name: Validate Composer configuration
         run: composer validate --no-check-publish
@@ -34,7 +45,12 @@ jobs:
         run: composer install --prefer-dist --no-interaction --no-progress
 
       - name: Check PHP syntax
-        run: find src tests -type f -name '*.php' -print0 | xargs -0 -n1 php -l
+        shell: bash
+        run: |
+          find src tests -type f -name '*.php' -print0 | xargs -0 -r -n1 php -l
+
+      - name: Build Codeception actors
+        run: vendor/bin/codecept build
 
       - name: Run Codeception tests
-        run: composer test
+        run: vendor/bin/codecept run --no-interaction
