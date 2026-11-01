@@ -55,8 +55,6 @@ class RuntimePermissionTest extends TestCase
         $this->assertSame(['start', 'stop'], $log);
     }
 
-    // ---- permissions --------------------------------------------------
-
     public function testListAndMapFormsAreNormalised(): void
     {
         $p = new PermissionManager(['permissions' => ['location', 'camera' => 'Scan receipts.']]);
