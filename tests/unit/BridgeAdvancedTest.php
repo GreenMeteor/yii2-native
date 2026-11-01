@@ -152,8 +152,6 @@ class BridgeAdvancedTest extends NativeTestCase
         $this->assertTrue($bridge->isAvailable());
     }
 
-    // ---- FunctionTransport --------------------------------------------
-
     public function testFunctionTransportPassesArraysByDefault(): void
     {
         $t = new FunctionTransport(['functionName' => 'yii2_native_test_call']);
