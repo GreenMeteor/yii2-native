@@ -11,7 +11,7 @@ use yii\helpers\FileHelper;
 class PluginScaffolder
 {
     /**
-     * @param string $id        `name` or `vendor/name`
+     * @param string $id `name` or `vendor/name`
      * @param string $directory target directory (created)
      * @return string[] written files
      */
