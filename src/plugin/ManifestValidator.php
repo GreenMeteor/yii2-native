@@ -9,11 +9,11 @@ use greenmeteor\native\permission\PermissionManager;
  *
  * ```php
  * return [
- *     'id' => 'acme/maps',                 // required, [vendor/]name, lowercase
+ *     'id' => 'acme/maps', // required, [vendor/]name, lowercase
  *     'name' => 'Maps',
  *     'version' => '1.0.0',
  *     'description' => '...',
- *     'class' => acme\maps\MapsPlugin::class,   // optional PluginInterface implementation
+ *     'class' => acme\maps\MapsPlugin::class, // optional PluginInterface implementation
  *     'platforms' => ['ios', 'android'],
  *     'permissions' => ['location'],
  *     'bridge' => ['functions' => ['Maps.open' => ['interactive' => false, 'params' => []]]],
