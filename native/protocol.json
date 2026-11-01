@@ -1,13 +1,973 @@
 {
   "protocol": "yii2-native-element-tree",
   "version": 1,
-  "description": "Initial framework-neutral element tree protocol.",
+  "description": "Framework-neutral element tree protocol and named-function bridge contract. Additive changes do not bump 'version'.",
+  "commonProperties": [
+    "id",
+    "padding",
+    "margin",
+    "background",
+    "width",
+    "height",
+    "visible",
+    "accessibilityLabel",
+    "testId"
+  ],
   "nodes": {
-    "text": {},
-    "button": {},
-    "image": {},
-    "vstack": {},
-    "hstack": {},
-    "scroll": {}
+    "text": {
+      "description": "Text label.",
+      "container": false,
+      "properties": [
+        "text",
+        "size",
+        "weight",
+        "color",
+        "align",
+        "maxLines"
+      ]
+    },
+    "button": {
+      "description": "Tappable button; emits nativeAction.",
+      "container": false,
+      "properties": [
+        "text",
+        "action",
+        "payload",
+        "variant",
+        "disabled",
+        "icon"
+      ]
+    },
+    "image": {
+      "description": "Image from URL or file path.",
+      "container": false,
+      "properties": [
+        "source",
+        "alt",
+        "contentMode",
+        "cornerRadius"
+      ]
+    },
+    "vstack": {
+      "description": "Vertical stack.",
+      "container": true,
+      "properties": [
+        "spacing",
+        "align",
+        "justify"
+      ]
+    },
+    "hstack": {
+      "description": "Horizontal stack.",
+      "container": true,
+      "properties": [
+        "spacing",
+        "align",
+        "justify"
+      ]
+    },
+    "zstack": {
+      "description": "Overlaid stack.",
+      "container": true,
+      "properties": [
+        "align"
+      ]
+    },
+    "scroll": {
+      "description": "Scrollable container.",
+      "container": true,
+      "properties": [
+        "horizontal",
+        "showsIndicator"
+      ]
+    },
+    "spacer": {
+      "description": "Flexible or fixed space.",
+      "container": false,
+      "properties": [
+        "size"
+      ]
+    },
+    "divider": {
+      "description": "Separator line.",
+      "container": false,
+      "properties": [
+        "thickness",
+        "color"
+      ]
+    },
+    "icon": {
+      "description": "Named system icon.",
+      "container": false,
+      "properties": [
+        "name",
+        "size",
+        "color"
+      ]
+    },
+    "input": {
+      "description": "Text input; emits nativeAction on change/submit.",
+      "container": false,
+      "properties": [
+        "name",
+        "value",
+        "placeholder",
+        "keyboard",
+        "secure",
+        "multiline",
+        "action",
+        "onChange"
+      ]
+    },
+    "toggle": {
+      "description": "Boolean switch.",
+      "container": false,
+      "properties": [
+        "name",
+        "label",
+        "value",
+        "action"
+      ]
+    },
+    "card": {
+      "description": "Elevated container.",
+      "container": true,
+      "properties": [
+        "elevation",
+        "cornerRadius"
+      ]
+    },
+    "list": {
+      "description": "Virtualised list of children.",
+      "container": true,
+      "properties": [
+        "itemSpacing"
+      ]
+    },
+    "topbar": {
+      "description": "Top app bar.",
+      "container": true,
+      "properties": [
+        "title",
+        "subtitle",
+        "showBack",
+        "actions"
+      ]
+    },
+    "bottomnav": {
+      "description": "Bottom navigation bar.",
+      "container": true,
+      "properties": [
+        "activeId"
+      ]
+    },
+    "navitem": {
+      "description": "Bottom navigation item.",
+      "container": false,
+      "properties": [
+        "label",
+        "icon",
+        "action",
+        "active",
+        "badge"
+      ]
+    },
+    "fab": {
+      "description": "Floating action button.",
+      "container": false,
+      "properties": [
+        "icon",
+        "action",
+        "label"
+      ]
+    },
+    "loading": {
+      "description": "Progress indicator.",
+      "container": false,
+      "properties": [
+        "size",
+        "message"
+      ]
+    }
+  },
+  "bridge": {
+    "version": 1,
+    "functions": {
+      "Camera.getPhoto": {
+        "description": "Open the camera and capture a photo.",
+        "interactive": true,
+        "permissions": [
+          "camera"
+        ],
+        "event": "nativeCameraPhotoTaken",
+        "params": {
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Camera.pickImages": {
+        "description": "Open the photo picker.",
+        "interactive": true,
+        "permissions": [
+          "photo_library"
+        ],
+        "event": "nativeMediaPicked",
+        "params": {
+          "multiple": {
+            "type": "boolean",
+            "default": false
+          },
+          "maxItems": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Camera.recordVideo": {
+        "description": "Record a video.",
+        "interactive": true,
+        "permissions": [
+          "camera",
+          "microphone"
+        ],
+        "event": "nativeCameraVideoRecorded",
+        "params": {
+          "maxDuration": {
+            "type": "integer",
+            "description": "Seconds."
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Biometrics.isAvailable": {
+        "description": "Whether biometric authentication can be used.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "boolean"
+      },
+      "Biometrics.prompt": {
+        "description": "Show the system biometric prompt.",
+        "interactive": true,
+        "permissions": [
+          "biometrics"
+        ],
+        "event": "nativeBiometricCompleted",
+        "params": {
+          "reason": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Browser.open": {
+        "description": "Open a URL in the system browser.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "format": "http-url"
+          }
+        }
+      },
+      "Browser.openInApp": {
+        "description": "Open a URL in an in-app browser sheet.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "format": "http-url"
+          }
+        }
+      },
+      "Browser.authenticate": {
+        "description": "Run a web authentication session (OAuth).",
+        "interactive": true,
+        "permissions": [],
+        "event": "nativeBrowserAuthCompleted",
+        "params": {
+          "url": {
+            "type": "string",
+            "required": true,
+            "format": "http-url"
+          },
+          "callbackScheme": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Clipboard.copy": {
+        "description": "Copy text to the clipboard.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "text": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "Clipboard.paste": {
+        "description": "Read text from the clipboard.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "string|null"
+      },
+      "Clipboard.clear": {
+        "description": "Clear the clipboard.",
+        "interactive": false,
+        "permissions": [],
+        "params": {}
+      },
+      "Device.getId": {
+        "description": "Stable device identifier.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "string"
+      },
+      "Device.getInfo": {
+        "description": "Platform, OS version, model, manufacturer.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "object"
+      },
+      "Device.getBattery": {
+        "description": "Battery state.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "object {level: float 0..1, isCharging: bool}"
+      },
+      "Device.vibrate": {
+        "description": "Vibrate the device.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "duration": {
+            "type": "integer",
+            "default": 100,
+            "description": "Milliseconds."
+          }
+        }
+      },
+      "Device.toggleFlashlight": {
+        "description": "Toggle the flashlight.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "object {enabled: bool}"
+      },
+      "Dialog.alert": {
+        "description": "Show a native alert with buttons.",
+        "interactive": true,
+        "permissions": [],
+        "event": "nativeDialogButtonPressed",
+        "params": {
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "message": {
+            "type": "string",
+            "required": true
+          },
+          "buttons": {
+            "type": "array",
+            "default": [
+              "OK"
+            ]
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Dialog.toast": {
+        "description": "Show a transient toast message.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "message": {
+            "type": "string",
+            "required": true
+          },
+          "duration": {
+            "type": "string",
+            "enum": [
+              "short",
+              "long"
+            ],
+            "default": "short"
+          }
+        }
+      },
+      "Filesystem.getPaths": {
+        "description": "Sandbox directories available to the app.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "object {documents, cache, temp}"
+      },
+      "Filesystem.pickFiles": {
+        "description": "Open the system document picker.",
+        "interactive": true,
+        "permissions": [],
+        "event": "nativeFilesPicked",
+        "params": {
+          "types": {
+            "type": "array"
+          },
+          "multiple": {
+            "type": "boolean",
+            "default": false
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Filesystem.saveToPhotos": {
+        "description": "Save an image or video file to the photo library.",
+        "interactive": false,
+        "permissions": [
+          "photo_library"
+        ],
+        "params": {
+          "path": {
+            "type": "string",
+            "required": true,
+            "format": "path"
+          }
+        }
+      },
+      "Geolocation.getCurrentPosition": {
+        "description": "Request the current position.",
+        "interactive": true,
+        "permissions": [
+          "location"
+        ],
+        "event": "nativeLocationReceived",
+        "params": {
+          "highAccuracy": {
+            "type": "boolean",
+            "default": false
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Geolocation.checkPermissions": {
+        "description": "Current location permission status.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "object {status: string}"
+      },
+      "Geolocation.requestPermissions": {
+        "description": "Ask the user for location permission.",
+        "interactive": true,
+        "permissions": [],
+        "event": "nativeLocationPermissionResult",
+        "params": {
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Haptics.impact": {
+        "description": "Impact feedback.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "style": {
+            "type": "string",
+            "enum": [
+              "light",
+              "medium",
+              "heavy",
+              "rigid",
+              "soft"
+            ],
+            "default": "medium"
+          }
+        }
+      },
+      "Haptics.notification": {
+        "description": "Notification feedback.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "success",
+              "warning",
+              "error"
+            ],
+            "default": "success"
+          }
+        }
+      },
+      "Haptics.selection": {
+        "description": "Selection-changed feedback.",
+        "interactive": false,
+        "permissions": [],
+        "params": {}
+      },
+      "Microphone.start": {
+        "description": "Start recording audio.",
+        "interactive": true,
+        "permissions": [
+          "microphone"
+        ],
+        "event": "nativeMicrophoneRecorded",
+        "params": {
+          "maxDuration": {
+            "type": "integer"
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Microphone.stop": {
+        "description": "Stop recording and emit the recorded file.",
+        "interactive": false,
+        "permissions": [],
+        "params": {}
+      },
+      "Microphone.pause": {
+        "description": "Pause the current recording.",
+        "interactive": false,
+        "permissions": [],
+        "params": {}
+      },
+      "Microphone.resume": {
+        "description": "Resume a paused recording.",
+        "interactive": false,
+        "permissions": [],
+        "params": {}
+      },
+      "Microphone.getStatus": {
+        "description": "Recorder state.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "string idle|recording|paused"
+      },
+      "Network.getStatus": {
+        "description": "Connectivity status.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "object {connected: bool, type: string, isExpensive: bool}"
+      },
+      "Notifications.schedule": {
+        "description": "Schedule a local notification.",
+        "interactive": false,
+        "permissions": [
+          "push_notifications"
+        ],
+        "params": {
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "body": {
+            "type": "string",
+            "required": true
+          },
+          "at": {
+            "type": "integer",
+            "description": "Unix timestamp."
+          },
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "data": {
+            "type": "object"
+          }
+        }
+      },
+      "Notifications.cancel": {
+        "description": "Cancel a scheduled notification.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "id": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "Notifications.enrollPush": {
+        "description": "Register for remote push notifications.",
+        "interactive": true,
+        "permissions": [
+          "push_notifications"
+        ],
+        "event": "nativePushTokenReceived",
+        "params": {
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Notifications.getPushToken": {
+        "description": "Last known push token.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "string|null"
+      },
+      "Notifications.setBadge": {
+        "description": "Set the app icon badge count.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "count": {
+            "type": "integer",
+            "required": true
+          }
+        }
+      },
+      "Scanner.scan": {
+        "description": "Open the barcode / QR scanner.",
+        "interactive": true,
+        "permissions": [
+          "camera"
+        ],
+        "event": "nativeScannerScanned",
+        "params": {
+          "formats": {
+            "type": "array",
+            "default": [
+              "qr"
+            ]
+          },
+          "prompt": {
+            "type": "string"
+          },
+          "id": {
+            "type": "string",
+            "description": "Request id echoed back in the completion event."
+          }
+        }
+      },
+      "Scanner.cancel": {
+        "description": "Dismiss the scanner.",
+        "interactive": false,
+        "permissions": [],
+        "params": {}
+      },
+      "SecureStorage.set": {
+        "description": "Store a value in the Keychain / Keystore.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "key": {
+            "type": "string",
+            "required": true
+          },
+          "value": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "SecureStorage.get": {
+        "description": "Read a value.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "key": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "returns": "string|null"
+      },
+      "SecureStorage.delete": {
+        "description": "Delete a value.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "key": {
+            "type": "string",
+            "required": true
+          }
+        }
+      },
+      "Share.text": {
+        "description": "Open the share sheet with text.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "title": {
+            "type": "string"
+          },
+          "text": {
+            "type": "string",
+            "required": true
+          },
+          "url": {
+            "type": "string",
+            "format": "http-url"
+          }
+        }
+      },
+      "Share.url": {
+        "description": "Share a URL.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "title": {
+            "type": "string"
+          },
+          "url": {
+            "type": "string",
+            "required": true,
+            "format": "http-url"
+          }
+        }
+      },
+      "Share.file": {
+        "description": "Share a file.",
+        "interactive": false,
+        "permissions": [],
+        "params": {
+          "title": {
+            "type": "string"
+          },
+          "path": {
+            "type": "string",
+            "required": true,
+            "format": "path"
+          },
+          "mime": {
+            "type": "string"
+          }
+        }
+      },
+      "System.openAppSettings": {
+        "description": "Open the OS settings page for this app.",
+        "interactive": false,
+        "permissions": [],
+        "params": {}
+      },
+      "System.getLocale": {
+        "description": "Active locale, e.g. en-US.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "string"
+      },
+      "System.getAppInfo": {
+        "description": "Installed app identifiers.",
+        "interactive": false,
+        "permissions": [],
+        "params": {},
+        "returns": "object {id, name, version, versionCode}"
+      }
+    }
+  },
+  "events": {
+    "nativeLaunch": {
+      "description": "App process started.",
+      "payload": {}
+    },
+    "nativeReady": {
+      "description": "Runtime ready to serve requests.",
+      "payload": {}
+    },
+    "nativeActive": {
+      "description": "App became active.",
+      "payload": {}
+    },
+    "nativeInactive": {
+      "description": "App became inactive.",
+      "payload": {}
+    },
+    "nativeForeground": {
+      "description": "App entered the foreground.",
+      "payload": {}
+    },
+    "nativeBackground": {
+      "description": "App entered the background.",
+      "payload": {}
+    },
+    "nativeTerminating": {
+      "description": "App is about to terminate.",
+      "payload": {}
+    },
+    "nativeLowMemory": {
+      "description": "OS reported low memory.",
+      "payload": {}
+    },
+    "nativeAction": {
+      "description": "A UI element emitted an action.",
+      "payload": {
+        "action": "string",
+        "id": "string",
+        "value": "mixed",
+        "payload": "object"
+      }
+    },
+    "nativeDeepLink": {
+      "description": "App opened from a deep link.",
+      "payload": {
+        "url": "string"
+      }
+    },
+    "nativeNetworkChanged": {
+      "description": "Connectivity changed.",
+      "payload": {
+        "connected": "bool",
+        "type": "string",
+        "isExpensive": "bool"
+      }
+    },
+    "nativeCameraPhotoTaken": {
+      "description": "Photo captured or cancelled.",
+      "payload": {
+        "id": "string",
+        "path": "string|null",
+        "mime": "string",
+        "cancelled": "bool"
+      }
+    },
+    "nativeCameraVideoRecorded": {
+      "description": "Video recorded or cancelled.",
+      "payload": {
+        "id": "string",
+        "path": "string|null",
+        "cancelled": "bool"
+      }
+    },
+    "nativeMediaPicked": {
+      "description": "Images picked.",
+      "payload": {
+        "id": "string",
+        "files": "array<{path,mime}>"
+      }
+    },
+    "nativeFilesPicked": {
+      "description": "Files picked.",
+      "payload": {
+        "id": "string",
+        "files": "array<{path,mime,name}>"
+      }
+    },
+    "nativeBiometricCompleted": {
+      "description": "Biometric prompt finished.",
+      "payload": {
+        "id": "string",
+        "success": "bool",
+        "error": "string|null"
+      }
+    },
+    "nativeDialogButtonPressed": {
+      "description": "Alert button pressed.",
+      "payload": {
+        "id": "string",
+        "index": "int",
+        "label": "string"
+      }
+    },
+    "nativeScannerScanned": {
+      "description": "Code scanned.",
+      "payload": {
+        "id": "string",
+        "data": "string",
+        "format": "string"
+      }
+    },
+    "nativeLocationReceived": {
+      "description": "Position result.",
+      "payload": {
+        "id": "string",
+        "success": "bool",
+        "latitude": "float",
+        "longitude": "float",
+        "accuracy": "float",
+        "timestamp": "int",
+        "error": "string|null"
+      }
+    },
+    "nativeLocationPermissionResult": {
+      "description": "Location permission result.",
+      "payload": {
+        "id": "string",
+        "status": "string"
+      }
+    },
+    "nativeMicrophoneRecorded": {
+      "description": "Recording finished.",
+      "payload": {
+        "id": "string",
+        "path": "string",
+        "duration": "float"
+      }
+    },
+    "nativePushTokenReceived": {
+      "description": "Push token issued.",
+      "payload": {
+        "id": "string",
+        "token": "string"
+      }
+    },
+    "nativePushReceived": {
+      "description": "Push received in foreground.",
+      "payload": {
+        "title": "string",
+        "body": "string",
+        "data": "object"
+      }
+    },
+    "nativeNotificationTapped": {
+      "description": "Notification tapped.",
+      "payload": {
+        "id": "string",
+        "data": "object"
+      }
+    },
+    "nativeBrowserAuthCompleted": {
+      "description": "Web auth session finished.",
+      "payload": {
+        "id": "string",
+        "url": "string|null",
+        "cancelled": "bool"
+      }
+    }
   }
 }
