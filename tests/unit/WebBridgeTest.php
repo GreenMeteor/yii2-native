@@ -65,8 +65,6 @@ class WebBridgeTest extends NativeTestCase
         return \Yii::$app->getResponse()->statusCode;
     }
 
-    // ---- bootstrap ------------------------------------------------------
-
     public function testBootstrapRegistersRoutesControllerAndFormatter(): void
     {
         $this->web();
@@ -108,8 +106,6 @@ class WebBridgeTest extends NativeTestCase
         }
         $this->assertSame('list', $app->createController('native/plugin/list')[1]);
     }
-
-    // ---- /bridge --------------------------------------------------------
 
     public function testCallSuccessEnvelope(): void
     {
@@ -241,8 +237,6 @@ class WebBridgeTest extends NativeTestCase
         }
     }
 
-    // ---- /events --------------------------------------------------------
-
     public function testEventIsDispatchedToHandlers(): void
     {
         $native = $this->web();
@@ -293,8 +287,6 @@ class WebBridgeTest extends NativeTestCase
             $this->assertFalse($res['ok']);
         }
     }
-
-    // ---- response format ------------------------------------------------
 
     public function testNativeResponseFormatAndTrait(): void
     {
