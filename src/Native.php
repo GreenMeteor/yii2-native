@@ -217,8 +217,6 @@ class Native extends Component
         return $this->_bridge->call($function, $arguments);
     }
 
-    // ---- device APIs --------------------------------------------------
-
     public function getBiometrics(): Biometrics
     {
         return $this->api('biometrics');
@@ -319,8 +317,6 @@ class Native extends Component
         return $this->_apis[$name];
     }
 
-    // ---- events -------------------------------------------------------
-
     /**
      * Deliver an event from the native shell to PHP handlers.
      *
@@ -347,8 +343,6 @@ class Native extends Component
         return $this->_protocol->hasEvent($type);
     }
 
-    // ---- HTTP bridge policy -------------------------------------------
-
     /** Whether `$function` may be called through the HTTP bridge endpoint. */
     public function isHttpFunctionAllowed(string $function): bool
     {
@@ -373,8 +367,6 @@ class Native extends Component
         return false;
     }
 
-    // ---- testing ------------------------------------------------------
-
     /**
      * Replace the transport with an in-memory fake and mark the runtime as
      * available. Intended for tests and local development without a device.
@@ -389,8 +381,6 @@ class Native extends Component
 
         return $fake;
     }
-
-    // ---- configuration ------------------------------------------------
 
     /** @return string[] human-readable configuration problems (empty when valid). */
     public function validate(): array
