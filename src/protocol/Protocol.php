@@ -66,8 +66,6 @@ final class Protocol
         return $this->data['commonProperties'] ?? [];
     }
 
-    // ---- nodes -------------------------------------------------------
-
     /** @return string[] */
     public function nodeTypes(): array
     {
@@ -88,8 +86,6 @@ final class Protocol
     {
         $this->data['nodes'][$type] = $spec;
     }
-
-    // ---- bridge functions ---------------------------------------------
 
     /** @return array<string,array> */
     public function functions(): array
@@ -128,8 +124,6 @@ final class Protocol
     {
         return (bool) ($this->data['bridge']['functions'][$name]['interactive'] ?? false);
     }
-
-    // ---- events -------------------------------------------------------
 
     /** @return string[] */
     public function eventNames(): array
