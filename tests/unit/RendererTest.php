@@ -2,14 +2,14 @@
 
 namespace greenmeteor\native\tests\unit;
 
-use Codeception\Test\Unit;
+use PHPUnit\Framework\TestCase;
 use greenmeteor\native\renderer\Element;
 use greenmeteor\native\renderer\Renderer;
 use greenmeteor\native\widgets\Button;
 use greenmeteor\native\widgets\Text;
 use greenmeteor\native\widgets\VStack;
 
-class RendererTest extends Unit
+class RendererTest extends TestCase
 {
     public function testWidgetTreeRendersToProtocolFrame(): void
     {

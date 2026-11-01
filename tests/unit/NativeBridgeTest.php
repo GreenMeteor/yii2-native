@@ -2,13 +2,13 @@
 
 namespace greenmeteor\native\tests\unit;
 
-use Codeception\Test\Unit;
+use PHPUnit\Framework\TestCase;
 use greenmeteor\native\bridge\NativeBridge;
 use greenmeteor\native\events\NativeCallEvent;
 use yii\base\InvalidArgumentException;
 use greenmeteor\native\exceptions\NativeUnavailableException;
 
-class NativeBridgeTest extends Unit
+class NativeBridgeTest extends TestCase
 {
     public function testEmptyFunctionNameIsRejected(): void
     {

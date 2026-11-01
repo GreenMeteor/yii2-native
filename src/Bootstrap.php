@@ -2,10 +2,17 @@
 
 namespace greenmeteor\native;
 
+use greenmeteor\native\console\NativeModule;
+use greenmeteor\native\web\BridgeController;
+use greenmeteor\native\web\NativeResponseFormatter;
 use Yii;
-use yii\base\BootstrapInterface;
 use yii\base\Application;
+use yii\base\BootstrapInterface;
 
+/**
+ * Composer-discovered bootstrap: registers `Yii::$app->native`, the console
+ * commands (web: HTTP bridge routes and the `native` response format).
+ */
 class Bootstrap implements BootstrapInterface
 {
     public function bootstrap($app)
@@ -14,16 +21,31 @@ class Bootstrap implements BootstrapInterface
             return;
         }
 
-        if (!isset($app->components['native'])) {
+        Yii::setAlias('@greenmeteor/native', __DIR__);
+
+        if (!$app->has('native')) {
             $app->set('native', [
                 'class' => Native::class,
             ]);
         }
 
         if ($app instanceof \yii\console\Application) {
-            $app->controllerMap['native'] = [
-                'class' => commands\NativeController::class,
-            ];
+            if (!$app->hasModule('native')) {
+                $app->setModule('native', ['class' => NativeModule::class]);
+            }
+
+            return;
+        }
+
+        if ($app instanceof \yii\web\Application) {
+            $app->controllerMap['native-bridge'] ??= ['class' => BridgeController::class];
+
+            $app->getUrlManager()->addRules([
+                'POST _native/bridge' => 'native-bridge/call',
+                'POST _native/events' => 'native-bridge/event',
+            ], false);
+
+            $app->getResponse()->formatters[NativeResponseFormatter::FORMAT] ??= NativeResponseFormatter::class;
         }
     }
 }
