@@ -2,11 +2,11 @@
 
 namespace greenmeteor\native\tests\unit;
 
-use Codeception\Test\Unit;
+use PHPUnit\Framework\TestCase;
 use greenmeteor\native\plugin\Plugin;
 use greenmeteor\native\plugin\PluginManager;
 
-class PluginManagerTest extends Unit
+class PluginManagerTest extends TestCase
 {
     public function testRegisterGetHasAndAll(): void
     {

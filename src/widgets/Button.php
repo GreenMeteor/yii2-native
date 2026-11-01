@@ -2,24 +2,31 @@
 
 namespace greenmeteor\native\widgets;
 
+/** Emits a `nativeAction` event with `$action` (and `$payload`) when tapped. */
 class Button extends Widget
 {
     public string $text = '';
     public ?string $action = null;
+    public ?array $payload = null;
+    /** filled|outlined|text */
+    public ?string $variant = null;
+    public ?bool $disabled = null;
+    public ?string $icon = null;
 
     public function getElementType(): string
     {
         return 'button';
     }
 
-    public function init()
+    protected function elementProperties(): array
     {
-        $this->properties['text'] = $this->text;
-
-        if ($this->action !== null) {
-            $this->properties['action'] = $this->action;
-        }
-
-        parent::init();
+        return [
+            'text' => $this->text,
+            'action' => $this->action,
+            'payload' => $this->payload,
+            'variant' => $this->variant,
+            'disabled' => $this->disabled,
+            'icon' => $this->icon,
+        ];
     }
 }

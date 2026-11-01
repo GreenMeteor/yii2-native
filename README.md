@@ -1,144 +1,95 @@
 # Yii2 Native
 
-Native mobile application foundation for Yii2.
+Native mobile application runtime and UI bridge for Yii2, inspired by the
+architecture of [NativePHP Mobile](https://nativephp.com/docs/mobile).
 
-Yii2 Native is an independent Yii2 implementation inspired by the architecture of NativePHP Mobile.
+Your Yii2 app describes its UI as a native element tree and reaches device
+capabilities (camera, scanner, secure storage, notifications, ...) through a
+validated named-function bridge. Everything is tested without a device.
 
 ## Status
 
-**Early development / foundation release.**
+**Early development.** This package is the **PHP half** of the system and is
+feature-complete against the protocol in [`native/protocol.json`](native/protocol.json):
 
-This package currently provides the Yii2-side architecture:
+| Area | What you get |
+|---|---|
+| Component | `Yii::$app->native` with app identity, permissions, plugins, HTTP policy |
+| Device APIs | 16 typed APIs (49 bridge functions): camera, scanner, biometrics, geolocation, microphone, notifications, secure storage, device, haptics, dialogs, share, browser, clipboard, filesystem, network, system |
+| Bridge | transports, PHP-side handlers, argument validation from the protocol, permission guard, call events |
+| Events | lifecycle, UI actions and completion of interactive calls, correlated by request id |
+| UI | 19 widgets, deterministic element ids, `make()` composition, `asNative()` responses |
+| HTTP + JS | CSRF-protected bridge endpoints and an ES-module client with `NativeError` |
+| Plugins | manifest validation, directory and Composer discovery, boot lifecycle |
+| Tooling | `native/install`, `doctor`, `config`, `manifest`, `build`, `run`, `plugin/*` |
+| Testing | `Native::fake()` and `FakeTransport` |
 
-- `Yii::$app->native`
-- persistent-runtime abstraction
-- native bridge abstraction
-- native lifecycle events
-- native element tree
-- Yii2 native widgets
-- plugin discovery/manifest model
-- Yii console commands
-- JavaScript bridge helper
-- iOS and Android shell scaffolding
-- unit tests
+**Not included yet:** the Swift / Kotlin shells and the embedded PHP runtime
+(see [`native/README.md`](native/README.md)). `native/build` prepares a manifest
+for them and can run build commands you configure; it does not compile an app.
 
 ## Requirements
 
-- PHP 8.2+
-- Yii2 2.0.55+
-- Xcode for iOS development
-- Android Studio / Android SDK for Android development
+- PHP 8.2+, Yii2 2.0.55+
+- For real apps (not for this package): Xcode and/or Android Studio
 
-## Installation
+## Quick start
 
 ```bash
 composer require greenmeteor/yii2-native
+php yii native/install      # create native/ and a starter config
+php yii native/doctor       # check the setup
 ```
-
-The package is Composer-discovered as a Yii2 bootstrap component.
-
-Initialize a native project:
-
-```bash
-php yii native/install
-```
-
-Inspect the environment:
-
-```bash
-php yii native/doctor
-```
-
-List discovered plugins:
-
-```bash
-php yii native/plugin/list
-```
-
-## Application component
-
-The package exposes:
 
 ```php
-Yii::$app->native
-```
+// config: 'components' => ['native' => require __DIR__ . '/../native/config/native.php']
 
-Example:
-
-```php
-$result = Yii::$app->native->bridge->call(
-    'Device.vibrate',
-    ['duration' => 100]
-);
-```
-
-Native availability can be checked with:
-
-```php
+// device APIs
 if (Yii::$app->native->isAvailable()) {
-    // Native runtime is available.
+    Yii::$app->native->haptics->notification('success');
+    $id = Yii::$app->native->camera->getPhoto('avatar');        // result arrives as an event
 }
-```
 
-## Native widgets
+Yii::$app->native->on(NativeEvents::CAMERA_PHOTO_TAKEN, function (NativeEvent $e) {
+    if ($e->id === 'avatar') { /* $e->get('path') */ }
+});
 
-The initial widget layer produces a framework-neutral element tree.
+// UI
+use greenmeteor\native\widgets\{Button, Text, VStack};
 
-```php
-use greenmeteor\native\widgets\Button;
-use greenmeteor\native\widgets\Text;
-use greenmeteor\native\widgets\VStack;
-
-return VStack::widget([
-    Text::widget([
-        'text' => 'Hello from Yii2',
-    ]),
-    Button::widget([
-        'text' => 'Continue',
-        'action' => 'continue',
-    ]),
-]);
-```
-
-The resulting tree can be serialized for the native renderer:
-
-```php
-$tree = VStack::widget([
-    Text::widget(['text' => 'Hello']),
-]);
-
-$frame = Yii::$app->native->renderer->render($tree);
-```
-
-## Native events
-
-Yii2's existing event system is used.
-
-```php
-Yii::$app->native->on(
-    \greenmeteor\native\events\NativeEvents::FOREGROUND,
-    function () {
-        // App returned to the foreground.
-    }
+return $this->asNative(          // controller using the RendersNative trait
+    VStack::make(['spacing' => 16], [
+        Text::make(['text' => 'Hello from Yii2']),
+        Button::make(['text' => 'Continue', 'action' => 'continue']),
+    ])
 );
 ```
 
-## Plugin model
+```js
+import { Native } from './native.js';
+await Native.device.vibrate({ duration: 100 });
+Native.on('nativeCameraPhotoTaken', (e) => preview.src = e.path);
+```
 
-Native plugins are Composer packages containing Yii2 PHP code and platform implementations.
+## Documentation
 
-A plugin may provide:
+Full documentation, with diagrams, is in **[`docs/`](docs/README.md)**:
 
-- bridge functions
-- lifecycle events
-- native UI elements
-- iOS Swift code
-- Android Kotlin code
-- permissions
-- native dependencies
-- build hooks
-
-The package intentionally follows the same high-level separation used by modern NativePHP: native UI rendering is separate from device/API bridge calls.
+[Getting started](docs/getting-started.md) ·
+[Architecture](docs/architecture.md) ·
+[Configuration](docs/configuration.md) ·
+[Bridge](docs/bridge.md) ·
+[Device APIs](docs/device-apis.md) ·
+[Events](docs/events.md) ·
+[UI widgets](docs/ui-widgets.md) ·
+[JavaScript](docs/javascript.md) ·
+[Plugins](docs/plugins.md) ·
+[Permissions & manifest](docs/permissions-and-manifest.md) ·
+[Console commands](docs/console-commands.md) ·
+[Security](docs/security.md) ·
+[Testing](docs/testing.md) ·
+[Protocol reference](docs/reference/protocol.md) ·
+[Upgrading](docs/upgrading.md)
 
 ## Architecture
 
@@ -147,13 +98,12 @@ The package intentionally follows the same high-level separation used by modern 
                          |
                   greenmeteor/native
                          |
-          +--------------+--------------+
-          |              |              |
-       Runtime        Renderer        Bridge
-          |              |              |
-          |          Element Tree       |
-          |              |              |
-          +--------------+--------------+
+     +-----------+-------+-------+-----------+
+     |           |               |           |
+  Runtime     Renderer         Bridge     Plugins
+     |           |               |           |
+     |      Element tree    Device APIs      |
+     +-----------+-------+-------+-----------+
                          |
                   Native Application
                    /             \
@@ -161,18 +111,21 @@ The package intentionally follows the same high-level separation used by modern 
               SwiftUI          Compose
 ```
 
-The long-term renderer is intended to use a compact frame protocol rather than JSON on every UI update. Device APIs remain a separate named-function bridge because they are less latency-sensitive and naturally extensible through plugins.
+Native UI rendering is kept separate from device / API calls: the renderer
+produces compact frames; the bridge is a named-function channel that plugins
+extend.
 
-## Development and tests
-
-Install development dependencies and run the Codeception unit suite:
+## Development
 
 ```bash
 composer install
-composer test
+composer test:phpunit   # or: composer test (Codeception) - same tests
+composer lint
+php bin/generate-protocol-docs.php   # after editing native/protocol.json
 ```
 
-The suite covers the runtime lifecycle, native bridge validation and events, plugin registration/discovery, and widget-tree rendering/JSON encoding. The GitHub Actions CI workflow runs Composer validation, PHP syntax checks, and the tests on PHP 8.2, 8.3, and 8.4. Pull requests also receive a dependency review when the repository is public.
+CI (`.github/workflows/ci.yml`) validates Composer, lints PHP, runs both test
+runners on PHP 8.2 to 8.5, and syntax-checks the JavaScript client.
 
 ## License
 

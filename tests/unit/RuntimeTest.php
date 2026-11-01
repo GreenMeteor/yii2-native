@@ -2,10 +2,10 @@
 
 namespace greenmeteor\native\tests\unit;
 
-use Codeception\Test\Unit;
+use PHPUnit\Framework\TestCase;
 use greenmeteor\native\runtime\Runtime;
 
-class RuntimeTest extends Unit
+class RuntimeTest extends TestCase
 {
     public function testRuntimeStartsUnavailableAndCanBeStartedAndStopped(): void
     {
