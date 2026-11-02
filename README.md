@@ -1,5 +1,7 @@
 # Yii2 Native
 
+[![PHP and Yii2 CI](https://github.com/GreenMeteor/yii2-native/actions/workflows/ci.yml/badge.svg?event=push)](https://github.com/GreenMeteor/yii2-native/actions/workflows/ci.yml)
+
 Native mobile application runtime and UI bridge for Yii2, inspired by the
 architecture of [NativePHP Mobile](https://nativephp.com/docs/mobile).
 
