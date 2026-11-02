@@ -23,6 +23,8 @@ tree, and talks to device APIs through a named-function bridge.
 | Handle results, lifecycle, UI actions | [Events](events.md) |
 | Build screens in PHP | [UI widgets](ui-widgets.md) |
 | Use it from JavaScript | [JavaScript client](javascript.md) |
+| See screens in a browser, no device | [Browser preview](preview.md) |
+| Open the app from a URL | [Deep links](deep-links.md) |
 | Extend it | [Plugins](plugins.md) |
 | Declare permissions, generate manifests | [Permissions & manifest](permissions-and-manifest.md) |
 | Use the `native/*` console commands | [Console commands](console-commands.md) |

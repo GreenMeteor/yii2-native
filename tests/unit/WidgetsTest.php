@@ -68,7 +68,6 @@ class WidgetsTest extends TestCase
 
     public function testPropertiesFollowLaterChanges(): void
     {
-        // Regression: properties were frozen at init() time.
         $t = new Text(['text' => 'one']);
         $t->text = 'two';
         $this->assertSame('two', $t->getElement()->properties['text']);
@@ -165,7 +164,7 @@ class WidgetsTest extends TestCase
             Button::make(['text' => 'Go', 'action' => 'go', 'payload' => ['id' => 5]]),
         ]);
 
-        $r = $this->renderer(true); // strict: every type must exist in protocol.json
+        $r = $this->renderer(true);
         $frame = $r->render($screen);
         $types = array_map(fn ($c) => $c['type'], $frame['root']['children']);
         $this->assertSame(['topbar', 'list', 'bottomnav', 'fab', 'button'], $types);

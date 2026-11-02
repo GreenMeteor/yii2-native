@@ -9,9 +9,11 @@ use yii\base\BaseObject;
  *
  * ```php
  * $fake = Yii::$app->native->fake(['Device.getId' => 'abc']);
- * Yii::$app->native->device->getId();   // 'abc'
+ * Yii::$app->native->device->getId();
  * $fake->assertCalled('Device.getId');
  * ```
+ *
+ * Here `getId()` returns `'abc'` and `assertCalled()` passes.
  *
  * A response may be a value, a `callable (array $arguments, string $function)`,
  * or a `Throwable` (thrown when the function is called). Unlisted functions

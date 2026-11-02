@@ -67,11 +67,14 @@ and call `Yii::$app->runAction('native-bridge/call')`.
 
 ## Running this package's own tests
 
+> The tests, CI configuration and dev tooling are **not** part of the release archive or Composer dist (see `.gitattributes` in the repository). Run them from a git checkout.
+
 ```bash
 composer install
 composer test:phpunit      # vendor/bin/phpunit
 composer test              # Codeception (same tests)
 composer lint              # php -l over src and tests
+npm install && npm test    # JS client + preview renderer (jsdom)
 ```
 
 The same tests run under both runners. Guard tests keep the contract honest:

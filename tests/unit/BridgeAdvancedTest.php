@@ -107,7 +107,7 @@ class BridgeAdvancedTest extends NativeTestCase
 
     public function testRegisteredPhpHandlerRunsWithoutRuntime(): void
     {
-        $bridge = new NativeBridge(); // no runtime, default FunctionTransport
+        $bridge = new NativeBridge();
         $bridge->register('Plug.ping', static fn (array $a, string $fn) => [$fn, $a]);
 
         $this->assertTrue($bridge->hasHandler('Plug.ping'));

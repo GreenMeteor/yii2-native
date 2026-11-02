@@ -89,6 +89,15 @@ class Doctor
             $add('HTTP bridge', self::OK, 'disabled');
         }
 
+        if (!empty($n->preview['enabled'])) {
+            $prod = defined('YII_ENV_PROD') && YII_ENV_PROD;
+            $add('Preview', $prod ? self::FAIL : self::WARN, $prod
+                ? 'the browser preview is enabled in a production environment; disable preview.enabled.'
+                : 'enabled (development only; never enable in production).');
+        } else {
+            $add('Preview', self::OK, 'disabled');
+        }
+
         return $checks;
     }
 

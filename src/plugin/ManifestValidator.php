@@ -9,11 +9,11 @@ use greenmeteor\native\permission\PermissionManager;
  *
  * ```php
  * return [
- *     'id' => 'acme/maps', // required, [vendor/]name, lowercase
+ *     'id' => 'acme/maps',
  *     'name' => 'Maps',
  *     'version' => '1.0.0',
  *     'description' => '...',
- *     'class' => acme\maps\MapsPlugin::class, // optional PluginInterface implementation
+ *     'class' => acme\maps\MapsPlugin::class,
  *     'platforms' => ['ios', 'android'],
  *     'permissions' => ['location'],
  *     'bridge' => ['functions' => ['Maps.open' => ['interactive' => false, 'params' => []]]],
@@ -23,6 +23,9 @@ use greenmeteor\native\permission\PermissionManager;
  *     'android' => ['sources' => 'android', 'dependencies' => ['com.google.android.gms:play-services-maps:18.2.0']],
  * ];
  * ```
+ *
+ * `id` is required (`name` or `vendor/name`, lowercase). `class` is an optional
+ * `PluginInterface` implementation.
  */
 final class ManifestValidator
 {

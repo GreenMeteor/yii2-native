@@ -10,7 +10,6 @@ namespace greenmeteor\native\events;
  */
 final class NativeEvents
 {
-    // Lifecycle
     public const LAUNCH = 'nativeLaunch';
     public const READY = 'nativeReady';
     public const ACTIVE = 'nativeActive';
@@ -20,12 +19,10 @@ final class NativeEvents
     public const TERMINATING = 'nativeTerminating';
     public const LOW_MEMORY = 'nativeLowMemory';
 
-    // App
     public const ACTION = 'nativeAction';
     public const DEEP_LINK = 'nativeDeepLink';
     public const NETWORK_CHANGED = 'nativeNetworkChanged';
 
-    // Completion of interactive calls
     public const CAMERA_PHOTO_TAKEN = 'nativeCameraPhotoTaken';
     public const CAMERA_VIDEO_RECORDED = 'nativeCameraVideoRecorded';
     public const MEDIA_PICKED = 'nativeMediaPicked';

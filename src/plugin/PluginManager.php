@@ -74,7 +74,6 @@ class PluginManager extends Component
             $directory,
             static function (\SplFileInfo $file) use ($basePath): bool {
                 if ($file->isDir()) {
-                    // Never descend into dependency/build folders below the base path.
                     return $file->getPathname() === $basePath || !in_array($file->getFilename(), self::SKIP_DIRECTORIES, true);
                 }
 
@@ -132,7 +131,6 @@ class PluginManager extends Component
             $candidates = isset($extra['manifest']) ? [(string) $extra['manifest']] : self::MANIFEST_FILES;
             foreach ($candidates as $relative) {
                 $path = realpath($root . '/' . $relative);
-                // The manifest must stay inside the package directory.
                 if ($path === false || !str_starts_with($path, $root . DIRECTORY_SEPARATOR) || !is_file($path)) {
                     continue;
                 }

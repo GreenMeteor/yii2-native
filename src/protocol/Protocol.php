@@ -103,10 +103,12 @@ final class Protocol
         return $this->data['bridge']['functions'][$name] ?? null;
     }
 
+    /**
+     * Declare a bridge function. A function registered without a `params` spec is
+     * not argument-validated; declare `params` to opt in.
+     */
     public function registerFunction(string $name, array $spec = []): void
     {
-        // `params` is deliberately not defaulted: a function without a params
-        // spec is not argument-validated. Declare `params` to opt in.
         $this->data['bridge']['functions'][$name] = $spec + [
             'description' => '',
             'interactive' => false,

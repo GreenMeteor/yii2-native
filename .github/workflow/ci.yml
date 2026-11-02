@@ -2,9 +2,8 @@ name: PHP and Yii2 CI
 
 on:
   push:
-    branches: ["main", "develop"]
+    branches: ["main", "master", "develop"]
   pull_request:
-    branches: ["main", "develop"]
   workflow_dispatch:
 
 permissions:
@@ -59,8 +58,29 @@ jobs:
           find src tests -type f -name '*.php' -print0 |
             xargs -0 -r -n1 php -l
 
+      - name: Run PHPUnit
+        run: vendor/bin/phpunit
+
       - name: Build Codeception
         run: vendor/bin/codecept build
 
       - name: Run Codeception tests
         run: vendor/bin/codecept run --no-interaction
+
+  javascript:
+    name: JavaScript client
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Check syntax
+        run: |
+          node --check resources/js/native.js
+          node --check resources/preview/preview.js
+      - name: Install dev dependencies
+        run: npm install --no-audit --no-fund
+      - name: Run JavaScript tests
+        run: npm test

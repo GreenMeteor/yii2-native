@@ -32,8 +32,6 @@ abstract class NativeTestCase extends TestCase
 
     protected function tearDown(): void
     {
-        // Every Yii Application registers global error handlers; remove them
-        // so PHPUnit does not flag the test as risky.
         if (\Yii::$app !== null) {
             \Yii::$app->getErrorHandler()->unregister();
             \Yii::$app = null;

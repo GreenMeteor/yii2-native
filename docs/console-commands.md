@@ -27,6 +27,7 @@ Run `php yii help native/<command>` for options.
 | Configuration | `Native::validate()` reports problems |
 | Plugins | a plugin failed to load or boot |
 | HTTP bridge | enabled with **no secret and `requireRuntime` off** (warns when only the secret is missing) |
+| Preview | enabled while `YII_ENV_PROD` is true (warns when enabled elsewhere) |
 
 Other checks (extensions, project directory, platform shells, runtime) report
 `ok` or `warn`. Use it in CI: `php yii native/doctor`.

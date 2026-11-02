@@ -27,6 +27,7 @@ use greenmeteor\native\permission\PermissionManager;
 use greenmeteor\native\plugin\PluginManager;
 use greenmeteor\native\protocol\Protocol;
 use greenmeteor\native\renderer\Renderer;
+use greenmeteor\native\routing\DeepLinkResolver;
 use greenmeteor\native\runtime\Runtime;
 use Yii;
 use yii\base\Component;
@@ -60,23 +61,18 @@ use yii\base\InvalidConfigException;
  */
 class Native extends Component
 {
-    public const VERSION = '0.2.0';
+    public const VERSION = '0.3.0';
 
     private const ORIENTATIONS = ['portrait', 'landscape', 'auto'];
 
     private const DEFAULT_HTTP = [
         'enabled' => true,
-        // Routes registered by the bootstrap when pretty URLs are enabled.
         'bridgeRoute' => '_native/bridge',
         'eventsRoute' => '_native/events',
-        // Optional shared secret the shell sends as the X-Native-Secret header.
         'secret' => null,
-        // Reject HTTP bridge requests unless the native runtime is present.
         'requireRuntime' => true,
-        // Function patterns (fnmatch) callable over HTTP. Empty = every known function.
         'allow' => [],
         'deny' => [],
-        // Accept events that are not in protocol.json / plugin manifests.
         'allowUnknownEvents' => false,
     ];
 
@@ -97,6 +93,13 @@ class Native extends Component
     public ?string $deepLinkScheme = null;
     /** @var string[] hosts for universal / app links */
     public array $deepLinkHosts = [];
+    /**
+     * Deep-link rules, path pattern => route, e.g. `['orders/<id:\d+>' => 'orders/view']`.
+     * See {@see DeepLinkResolver}.
+     *
+     * @var array<string,string>
+     */
+    public array $deepLinks = [];
     /** @var array<int|string,string|null> see {@see PermissionManager} */
     public array $permissions = [];
     /**
@@ -111,6 +114,12 @@ class Native extends Component
     /** HTTP bridge options, see {@see DEFAULT_HTTP}. */
     public array $http = [];
     /**
+     * Browser preview (development only; see {@see web\PreviewController}).
+     * `enabled` (default false), `fake` (default true: run handlers against a fake
+     * transport), `responses` (canned fake responses, function => value).
+     */
+    public array $preview = [];
+    /**
      * Shell build commands: `['android' => ['build' => '...', 'run' => '...'], 'ios' => [...]]`.
      * Executed by `native/build --exec` and `native/run --exec`.
      */
@@ -123,6 +132,7 @@ class Native extends Component
     private ?PluginManager $_pluginManager = null;
     private ?PermissionManager $_permissionManager = null;
     private ?Protocol $_protocol = null;
+    private ?DeepLinkResolver $_deepLinkResolver = null;
     /** @var array<string,BaseApi> */
     private array $_apis = [];
 
@@ -150,6 +160,7 @@ class Native extends Component
         parent::init();
 
         $this->http = array_replace(self::DEFAULT_HTTP, $this->http);
+        $this->preview = array_replace(['enabled' => false, 'fake' => true, 'responses' => []], $this->preview);
         if ($this->name === '' && Yii::$app !== null) {
             $this->name = (string) Yii::$app->name;
         }
@@ -205,6 +216,17 @@ class Native extends Component
     public function getProtocol(): Protocol
     {
         return $this->_protocol;
+    }
+
+    public function getDeepLinkResolver(): DeepLinkResolver
+    {
+        return $this->_deepLinkResolver ??= new DeepLinkResolver($this->deepLinkScheme, $this->deepLinkHosts, $this->deepLinks);
+    }
+
+    /** @return array{route:string,params:array}|null */
+    public function resolveDeepLink(string $url): ?array
+    {
+        return $this->getDeepLinkResolver()->resolve($url);
     }
 
     public function isAvailable(): bool
@@ -328,6 +350,9 @@ class Native extends Component
     {
         $id ??= isset($payload['id']) && is_scalar($payload['id']) ? (string) $payload['id'] : null;
         $event = new NativeEvent(['type' => $type, 'payload' => $payload, 'id' => $id]);
+        if ($type === NativeEvents::DEEP_LINK && isset($payload['url']) && is_string($payload['url'])) {
+            $event->route = $this->resolveDeepLink($payload['url']);
+        }
 
         $this->trigger($type, $event);
         if (!$event->handled) {
@@ -408,6 +433,12 @@ class Native extends Component
         foreach ($this->deepLinkHosts as $host) {
             if (!is_string($host) || !preg_match('/^[A-Za-z0-9.\-*]+\z/', $host)) {
                 $errors[] = 'deepLinkHosts must contain plain host names.';
+                break;
+            }
+        }
+        foreach ($this->deepLinks as $pattern => $route) {
+            if (!is_string($pattern) || !is_string($route) || $route === '') {
+                $errors[] = 'deepLinks must map path patterns to route strings.';
                 break;
             }
         }
