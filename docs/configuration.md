@@ -35,6 +35,7 @@ Validate the result any time with `php yii native/config` or
 | `orientation` | `portrait` | `portrait`, `landscape` or `auto`. |
 | `deepLinkScheme` | `null` | Custom URL scheme, e.g. `acme` for `acme://...`. |
 | `deepLinkHosts` | `[]` | Hosts for universal / app links. |
+| `deepLinks` | `[]` | Path pattern => route rules. See [Deep links](deep-links.md). |
 
 ## Behaviour
 
@@ -106,6 +107,14 @@ array:
 | `allowUnknownEvents` | `false` | Accept events not declared in `protocol.json` or a plugin. |
 
 See [Security](security.md) for how these fit together.
+
+## Preview options (`preview`)
+
+| Key | Default | Notes |
+|---|---|---|
+| `enabled` | `false` | Turns the [browser preview](preview.md) on. Development only. |
+| `fake` | `true` | Run preview events against a fake transport. |
+| `responses` | `[]` | Canned answers for the fake, `function => value`. |
 
 ## Event handlers in config
 

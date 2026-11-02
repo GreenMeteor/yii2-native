@@ -68,7 +68,7 @@ Files written to `native/build/`:
 ```json
 {
   "schema": 1,
-  "generator": "greenmeteor/yii2-native 0.2.0",
+  "generator": "greenmeteor/yii2-native 0.3.0",
   "protocolVersion": 1,
   "app": {"id": "com.acme.shop", "name": "Acme Shop", "version": "1.4.0", "versionCode": 14, "orientation": "portrait"},
   "deepLinks": {"scheme": "acme", "hosts": ["shop.acme.test"]},

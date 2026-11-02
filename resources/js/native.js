@@ -2,8 +2,11 @@
  * Yii2 Native JavaScript client (ES module; also exposes `window.Native`).
  *
  *   import { Native } from './native.js';
- *   await Native.device.vibrate({ duration: 100 });   // -> Device.vibrate
+ *   await Native.device.vibrate({ duration: 100 });
  *   Native.on('nativeCameraPhotoTaken', e => console.log(e.path));
+ *
+ * `Native.<api>.<method>()` calls the bridge function `Api.method`, so
+ * `Native.device.vibrate()` is `Device.vibrate`.
  *
  * Endpoints come from `window.yii2NativeConfig` (set by NativeAsset) or
  * `Native.configure()`. Requests carry Yii's CSRF token.
@@ -131,8 +134,6 @@ function dispatch(event, payload) {
     }
 }
 
-// The native shell delivers events with:
-//   window.dispatchEvent(new CustomEvent('native:event', { detail: { name, payload } }))
 if (typeof window !== 'undefined') {
     window.addEventListener('native:event', (e) => {
         if (e.detail && typeof e.detail.name === 'string') dispatch(e.detail.name, e.detail.payload || {});
@@ -148,7 +149,6 @@ const core = { call, emit, on, off, once, configure, NativeError };
 export const Native = new Proxy(core, {
     get(target, prop) {
         if (prop in target) return target[prop];
-        // Avoid being thenable (`await Native`) and breaking Symbol lookups.
         if (typeof prop !== 'string' || prop === 'then') return undefined;
         const ns = prop.charAt(0).toUpperCase() + prop.slice(1);
         return new Proxy({}, {

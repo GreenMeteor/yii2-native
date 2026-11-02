@@ -82,6 +82,13 @@ events endpoint, so UI actions then have to reach PHP through your own channel
 `php yii native/doctor` flags risky combinations; notably it **fails** when the
 HTTP bridge is enabled with neither a secret nor `requireRuntime`.
 
+## The preview
+
+The [browser preview](preview.md) is a separate, **development-only** surface. It
+is off by default (all routes return 404), accepts only `nativeAction` events,
+requires the CSRF token, and `native/doctor` fails if it is enabled in a
+`YII_ENV_PROD` environment. Do not enable it in production.
+
 ## Things the package does for you
 
 - Function names are matched with `\z`-anchored patterns (PCRE `$` would accept
@@ -91,6 +98,7 @@ HTTP bridge is enabled with neither a secret nor `requireRuntime`.
 - Plugin manifests discovered through Composer must resolve **inside** the
   package directory.
 - Build XML fragments escape permission descriptions.
+- Deep links are accepted only for your own scheme and hosts, with traversal-style and control-character inputs rejected.
 
 ## Things that remain your responsibility
 
