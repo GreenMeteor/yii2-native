@@ -11,8 +11,10 @@ use yii\web\View;
  * Publishes `resources/js/native.js` (an ES module that also sets `window.Native`)
  * and passes the bridge endpoints from the PHP configuration to it.
  *
+ * Register it from a layout or view:
+ *
  * ```php
- * NativeAsset::register($this);   // in a layout or view
+ * NativeAsset::register($this);
  * ```
  */
 class NativeAsset extends AssetBundle

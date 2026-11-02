@@ -69,27 +69,27 @@ class ProjectInstaller
  */
 return [
     'class' => \\greenmeteor\\native\\Native::class,
-    'appId' => 'com.example.app',     // reverse-DNS, lowercase
+    'appId' => 'com.example.app',     /* reverse-DNS, lowercase */
     'name' => '{$name}',
     'version' => '1.0.0',
     'versionCode' => 1,
-    'orientation' => 'portrait',      // portrait | landscape | auto
-    'deepLinkScheme' => null,         // e.g. 'myapp'
+    'orientation' => 'portrait',      /* portrait | landscape | auto */
+    'deepLinkScheme' => null,         /* e.g. 'myapp' */
     'deepLinkHosts' => [],
-    // Declare what the app uses; values are optional iOS usage descriptions.
+    /* Declare what the app uses; values are optional iOS usage descriptions. */
     'permissions' => [
-        // 'camera' => 'Scan receipts.',
-        // 'location',
+        /* 'camera' => 'Scan receipts.', */
+        /* 'location', */
     ],
     'plugins' => [
-        // '@app/native/plugins',
+        /* '@app/native/plugins', */
     ],
     'http' => [
-        // 'secret' => 'a-long-random-string-shared-with-the-shell',
+        /* 'secret' => 'a-long-random-string-shared-with-the-shell', */
     ],
     'build' => [
-        // 'android' => ['build' => './gradlew assembleDebug', 'run' => './gradlew installDebug'],
-        // 'ios' => ['build' => 'xcodebuild -scheme App build'],
+        /* 'android' => ['build' => './gradlew assembleDebug', 'run' => './gradlew installDebug'], */
+        /* 'ios' => ['build' => 'xcodebuild -scheme App build'], */
     ],
 ];
 

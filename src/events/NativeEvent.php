@@ -24,6 +24,11 @@ class NativeEvent extends Event
      * events endpoint returns it to the shell as a rendered UI frame.
      */
     public $response;
+    /**
+     * For deep-link events: the resolved `['route' => ..., 'params' => [...]]`,
+     * or null when the URL is not allowed or matches no rule.
+     */
+    public ?array $route = null;
 
     public function get(string $key, $default = null)
     {

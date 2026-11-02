@@ -5,15 +5,23 @@ namespace greenmeteor\native\widgets;
 class Image extends Widget
 {
     public string $source = '';
+    public ?string $alt = null;
+    /** fit|fill|cover */
+    public ?string $contentMode = null;
+    public ?int $cornerRadius = null;
 
     public function getElementType(): string
     {
         return 'image';
     }
 
-    public function init()
+    protected function elementProperties(): array
     {
-        $this->properties['source'] = $this->source;
-        parent::init();
+        return [
+            'source' => $this->source,
+            'alt' => $this->alt,
+            'contentMode' => $this->contentMode,
+            'cornerRadius' => $this->cornerRadius,
+        ];
     }
 }

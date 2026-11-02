@@ -64,7 +64,9 @@ class Renderer extends Component
     }
 
     /**
-     * Check node types (when a protocol is available), child types and depth.
+     * Check node types and their properties (when a protocol is available),
+     * child types and depth. Nodes registered without a `properties` list
+     * (e.g. plugin elements) accept any property.
      *
      * @return string[] problems; empty when the tree is valid
      */
@@ -77,6 +79,15 @@ class Renderer extends Component
             }
             if ($this->protocol !== null && !$this->protocol->hasNode($element->type)) {
                 $errors[] = "Unknown node type '{$element->type}'.";
+            }
+            $spec = $this->protocol?->getNode($element->type);
+            if (isset($spec['properties'])) {
+                $allowed = array_merge($spec['properties'], $this->protocol->commonProperties());
+                foreach (array_keys($element->properties) as $property) {
+                    if (!in_array($property, $allowed, true)) {
+                        $errors[] = "Unknown property '{$property}' on '{$element->type}'.";
+                    }
+                }
             }
             foreach ($element->children as $child) {
                 if (!$child instanceof Element) {
