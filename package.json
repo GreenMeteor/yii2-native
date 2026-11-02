@@ -1,0 +1,12 @@
+{
+  "name": "yii2-native-dev-tools",
+  "private": true,
+  "type": "module",
+  "description": "Dev-only tooling for the JavaScript parts of greenmeteor/yii2-native (not published).",
+  "scripts": {
+    "test": "node tests/js/preview.test.mjs && node tests/js/client.test.mjs"
+  },
+  "devDependencies": {
+    "jsdom": "^26.0.0"
+  }
+}

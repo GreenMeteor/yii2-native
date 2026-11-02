@@ -97,7 +97,7 @@ class WebBridgeTest extends NativeTestCase
             'native/run' => \greenmeteor\native\commands\RunController::class,
             'native/manifest' => \greenmeteor\native\commands\ManifestController::class,
             'native/config' => \greenmeteor\native\commands\ConfigController::class,
-            'native/plugin/list' => \greenmeteor\native\commands\PluginController::class, // the route the README documents
+            'native/plugin/list' => \greenmeteor\native\commands\PluginController::class,
         ];
         foreach ($expect as $route => $class) {
             $result = $app->createController($route);

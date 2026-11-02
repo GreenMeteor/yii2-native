@@ -60,7 +60,7 @@ class ArgumentValidatorTest extends TestCase
         [$bridge, $fake] = $this->bridge();
         $bridge->call('Browser.open', ['url' => 'https://example.com/path?q=1']);
         $bridge->call('Device.vibrate', ['duration' => 200]);
-        $bridge->call('Device.vibrate'); // default applies natively; optional here
+        $bridge->call('Device.vibrate');
         $bridge->call('Notifications.schedule', ['id' => 'a', 'title' => 't', 'body' => 'b', 'at' => 1, 'data' => ['k' => 'v']]);
         $this->assertCount(4, $fake->calls);
     }

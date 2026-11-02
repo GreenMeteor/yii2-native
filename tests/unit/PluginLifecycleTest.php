@@ -33,7 +33,6 @@ class PluginLifecycleTest extends NativeTestCase
         $this->assertTrue($native->permissionManager->has('location'));
         $this->assertSame([], $native->pluginManager->getErrors());
 
-        // A second Native instance must not see them (protocol is per-instance).
         $this->assertFalse((new \greenmeteor\native\protocol\Protocol())->hasFunction('Maps.open'));
     }
 

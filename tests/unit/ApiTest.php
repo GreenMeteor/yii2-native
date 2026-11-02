@@ -57,7 +57,7 @@ class ApiTest extends NativeTestCase
         $this->assertSame('recording', $n->microphone->getStatus());
         $this->assertNull($n->notifications->getPushToken());
         $this->assertSame('secret', $n->secureStorage->get('k'));
-        $this->assertSame([], $n->device->getInfo()); // null -> []
+        $this->assertSame([], $n->device->getInfo());
     }
 
     public function testBrowserAndShareOnlyAcceptHttpUrls(): void

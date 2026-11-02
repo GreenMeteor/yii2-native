@@ -20,6 +20,8 @@ feature-complete against the protocol in [`native/protocol.json`](native/protoco
 | Events | lifecycle, UI actions and completion of interactive calls, correlated by request id |
 | UI | 19 widgets, deterministic element ids, `make()` composition, `asNative()` responses |
 | HTTP + JS | CSRF-protected bridge endpoints and an ES-module client with `NativeError` |
+| Preview | opt-in browser preview: render screens, try actions, see bridge calls, no device |
+| Deep links | scheme/host-checked URL → Yii route resolution |
 | Plugins | manifest validation, directory and Composer discovery, boot lifecycle |
 | Tooling | `native/install`, `doctor`, `config`, `manifest`, `build`, `run`, `plugin/*` |
 | Testing | `Native::fake()` and `FakeTransport` |
@@ -83,6 +85,8 @@ Full documentation, with diagrams, is in **[`docs/`](docs/README.md)**:
 [Events](docs/events.md) ·
 [UI widgets](docs/ui-widgets.md) ·
 [JavaScript](docs/javascript.md) ·
+[Browser preview](docs/preview.md) ·
+[Deep links](docs/deep-links.md) ·
 [Plugins](docs/plugins.md) ·
 [Permissions & manifest](docs/permissions-and-manifest.md) ·
 [Console commands](docs/console-commands.md) ·
@@ -121,6 +125,7 @@ extend.
 composer install
 composer test:phpunit   # or: composer test (Codeception) - same tests
 composer lint
+npm install && npm test   # JS client and preview renderer tests (needs Node 18+)
 php bin/generate-protocol-docs.php   # after editing native/protocol.json
 ```
 

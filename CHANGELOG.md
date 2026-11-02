@@ -1,5 +1,20 @@
 # Changelog
 
+## 0.3.0
+
+### Added
+- **Browser preview** (`preview.enabled`, off by default): `/_native/preview` renders frames as DOM, delivers
+  `nativeAction` events to your handlers against a fake transport, and lists the bridge calls they make.
+  `resources/preview/preview.js` is reusable and XSS-tested.
+- **Deep links**: `deepLinks` rules and `DeepLinkResolver` (scheme/host allow-listing, traversal and control-character
+  rejection); `NativeEvent::$route` is filled for `nativeDeepLink` events; `Native::resolveDeepLink()`.
+- **Strict property validation**: `Renderer::validate()` / strict mode now reports unknown properties for built-in
+  node types (plugin nodes without a `properties` list accept anything).
+- `number` parameter type in argument validation.
+- `native/doctor` checks the preview setting.
+- JavaScript tests (`npm test`): client and preview renderer, run in CI.
+- Docs: `preview.md`, `deep-links.md`.
+
 ## 0.2.0
 
 ### Added

@@ -72,10 +72,10 @@ class BuildToolsTest extends NativeTestCase
         $this->assertContains('config/native.php', $first['created']);
         $this->assertDirectoryExists("$root/android");
 
-        file_put_contents("$root/config/native.php", '<?php // customised');
+        file_put_contents("$root/config/native.php", '<?php /* customised */');
         $second = $installer->install();
         $this->assertSame([], $second['created']);
-        $this->assertSame('<?php // customised', file_get_contents("$root/config/native.php"));
+        $this->assertSame('<?php /* customised */', file_get_contents("$root/config/native.php"));
 
         $installer->install(true);
         $this->assertStringContainsString('com.example.app', file_get_contents("$root/config/native.php"));
